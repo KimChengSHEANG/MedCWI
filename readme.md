@@ -1,22 +1,12 @@
-
-
-
-
-
-
-# Install dependencies
+#### Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
+### CNN model
 
-
-# To train the models
-
-
-
-**To train the CNN model, simply running the follow script.**
+To train the CNN model, simply running the follow script.
 
 ```bash
 python scripts/train_cnn.py
@@ -36,13 +26,12 @@ features_args =['CamemBertEmbeddingFeature']
 features_args =['FastTextEmbeddingFeature', 'WordLengthFeature'] 
 ```
 
-`train_and_evaluate_n_times(features_args, n=1)` # n=1 mean the model one time, n=5 train 5 times.
+`train_and_evaluate_n_times(features_args, n=1)` # n=1 means train the model one time, n=5 train 5 times.
 
 `All the model checkpoints and report will be saved to the folder models/FR/*`
 
 
-
-**Here is the list of all features**
+**Features**
 
 * FastTextEmbeddingFeature
 * CamemBertEmbeddingFeature
@@ -55,10 +44,14 @@ features_args =['FastTextEmbeddingFeature', 'WordLengthFeature']
 * ClearFrequencyFeature
 
 
+### **CatBoost Model**
+
+```bash
+python scripts/train_catboost.py
+```
 
 
-
-**Train CatBoost Model**
+### **CatBoost Model**
 
 ```bash
 python scripts/train_catboost.py
@@ -66,9 +59,6 @@ python scripts/train_catboost.py
 
 
 
-**Train CatBoost Model**
+#### Results:
 
-```bash
-python scripts/train_catboost.py
-```
-
+* The report of each training and evaluation is stored in the folder **`/models/CNN|CatBoost|XGBoost/*/reports.txt`**
