@@ -1,0 +1,18 @@
+# resources/dataset
+# resources/others
+/resources/others/*.vec
+/resources/dumps
+/resources/processed_data
+/models
+/results
+papers
+reports
+*.pyc
+._*
+~*
+
+catboost_info
+catboost_cached_datasets
+playground/submission.csv
+playground/test.csv
+playground/train.csv

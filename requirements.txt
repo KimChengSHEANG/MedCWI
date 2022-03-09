@@ -1,0 +1,16 @@
+tensorflow==1.15
+# tensorflow-gpu==1.15
+nltk
+matplotlib
+sklearn
+spacy
+flair
+pyhyphen==3.0.1
+beautifulsoup4
+pandas
+openpyxl
+tqdm
+wordfreq
+stopwordsiso
+catboost==1.0.4
+xgboost==1.5.2
