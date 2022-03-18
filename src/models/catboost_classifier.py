@@ -7,7 +7,7 @@ from pathlib import Path
 import time
 from catboost.utils import get_gpu_device_count
 
-def train_and_evaluate(features, iterations=1200, learning_rate=0.03, use_gpu=True, n_seed=1):
+def train_and_evaluate(features, iterations=1200, learning_rate=0.03, use_gpu=True, n_seed=1, save_model=True):
     print("Features: ", features)
     print('Preparing data...')
     timestamp = str(int(time.time()))
@@ -21,7 +21,7 @@ def train_and_evaluate(features, iterations=1200, learning_rate=0.03, use_gpu=Tr
     print('Creating model...')
     # create a model   
     device = 'CPU'
-    if use_gpu and len(get_gpu_device_count()) > 0: 
+    if use_gpu and get_gpu_device_count() > 0: 
         device = 'GPU'
         print("Training using GPU")
     else:
@@ -38,14 +38,14 @@ def train_and_evaluate(features, iterations=1200, learning_rate=0.03, use_gpu=Tr
         verbose=1
     )
 
-    
-    model_dump_filepath = out_dir / 'model.pk'
-    pickle.dump(model, model_dump_filepath.open('wb'))
+    if save_model:
+        model_dump_filepath = out_dir / 'model.pk'
+        pickle.dump(model, model_dump_filepath.open('wb'))
 
     # evaluate the model with test data
     predictions = model.predict(x_test)
 
-    evaluation_report(predictions, y_test, x_test_sents, out_dir, features)
+    return evaluation_report(predictions, y_test, x_test_sents, out_dir, features)
 
 
 def catboost_train_and_evaluate_n_times(features, iterations=1200, learning_rate=0.03, n=1, use_gpu=False):

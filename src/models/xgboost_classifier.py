@@ -47,7 +47,7 @@ def train_and_evaluate(features, max_depth=10, n_estimators=300, learning_rate=0
     predictions = gbm_model.predict(x_test)
 
     # print(classification_report(y_test, predictions, digits=4))
-    evaluation_report(predictions, y_test, x_test_sents, out_dir, features)
+    return evaluation_report(predictions, y_test, x_test_sents, out_dir, features)
 
     
 def xgboost_train_and_evaluate_n_times(features, max_depth=10, n_estimators=300, learning_rate=0.05, use_gpu=False, n=1):

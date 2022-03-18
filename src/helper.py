@@ -200,6 +200,8 @@ def evaluation_report(predictions, y_test, x_test_sents, output_dir, features):
         write_lines(features, features_filepath)
 
     print("Save report to a file. Completed!")
+    return f1_score(y_test, predictions, average='macro')
+
 
 def count_training(features, model_type):
     out_dir = REPO_DIR / f'models/{model_type}'

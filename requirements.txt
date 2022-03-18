@@ -14,3 +14,6 @@ wordfreq==2.5.1
 stopwordsiso==0.6.1
 catboost==1.0.4
 xgboost==1.5.2
+optuna
+optuna-dashboard
+

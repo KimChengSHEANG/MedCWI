@@ -6,7 +6,6 @@ from tqdm import tqdm
 from string import punctuation
 import multiprocessing as mp
 
-from string import punctuation
 import stopwordsiso as stopwords
 
 stopwords = stopwords.stopwords("fr")
@@ -50,29 +49,13 @@ def get_spacy_model():
 def spacy_process(text):
     return get_spacy_model()(str(text))
 
-def remove_prefix_punctuation(s):
-    new_s = ""
-    # remove punctuation as prefix
-    start = True
-    for c in s:
-        if start and c in punctuation:
-            pass # skip the punctuation
-        else:
-            start = False
-            new_s += c
-    return new_s
-def remove_suffix_punctuation(s):
-    s = s[::-1] # reverse
-    return remove_prefix_punctuation(s)[::-1]
-
 @lru_cache(maxsize=None)
 def is_punctuation(word):
     return ''.join([char for char in word if char not in punctuation]) == ''
 
 def remove_punctuation(tokens):
     tokens = [token for token in tokens if not is_punctuation(token)]
-    tokens = [remove_prefix_punctuation(token) for token in tokens]
-    tokens = [remove_suffix_punctuation(token) for token in tokens]
+    tokens = [token.strip(punctuation) for token in tokens] # strip punc: !!hello#!! -> hello
     return tokens
     
 def remove_stopword(tokens):
