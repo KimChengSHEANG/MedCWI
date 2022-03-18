@@ -4,10 +4,11 @@ from src.preprocessor import Preprocessor
 import xgboost as xgb
 from pathlib import Path
 import time 
+import pickle
 
 xgb.set_config(verbosity=2)
 
-def train_and_evaluate(features, max_depth=10, n_estimators=300, learning_rate=0.05, use_gpu=True, n_seed=1):
+def train_and_evaluate(features, max_depth=10, n_estimators=300, learning_rate=0.05, use_gpu=True, n_seed=1, save_model=True):
     print("Features: ", features)
     print('Preparing data...')
     timestamp = str(int(time.time()))
@@ -44,6 +45,11 @@ def train_and_evaluate(features, max_depth=10, n_estimators=300, learning_rate=0
     gbm_model = gbm.fit(x_train, y_train, 
                         eval_set=[(x_valid, y_valid)],
                         verbose=1)
+
+    if save_model:
+        model_dump_filepath = out_dir / 'model.pk'
+        pickle.dump(gbm_model, model_dump_filepath.open('wb'))
+
     predictions = gbm_model.predict(x_test)
 
     # print(classification_report(y_test, predictions, digits=4))
