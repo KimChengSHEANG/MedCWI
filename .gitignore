@@ -16,3 +16,4 @@ catboost_cached_datasets
 playground/submission.csv
 playground/test.csv
 playground/train.csv
+.python-version

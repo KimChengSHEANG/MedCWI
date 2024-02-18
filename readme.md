@@ -1,5 +1,7 @@
 #### Install dependencies
 
+Test on Python 3.7.5 with [pyenv](https://github.com/pyenv/pyenv)
+
 ```bash
 pip install -r requirements.txt
 ```
@@ -13,8 +15,6 @@ python scripts/train_cnn.py
 ```
 
 *If you run this for the first time, it will around 30mn (not include training) for downloading resources and preprocessing.*
-
-
 
 To customize the features, edit feature array in each training script, e.g.,
 
@@ -30,7 +30,6 @@ features_args =['FastTextEmbeddingFeature', 'WordLengthFeature']
 
 `All the model checkpoints and report will be saved to the folder models/FR/*`
 
-
 **Features**
 
 * FastTextEmbeddingFeature
@@ -43,6 +42,11 @@ features_args =['FastTextEmbeddingFeature', 'WordLengthFeature']
 * LangGenFrequencyFeature
 * ClearFrequencyFeature
 
+### **CatBoost Model**
+
+```bash
+python scripts/train_catboost.py
+```
 
 ### **CatBoost Model**
 
@@ -50,15 +54,6 @@ features_args =['FastTextEmbeddingFeature', 'WordLengthFeature']
 python scripts/train_catboost.py
 ```
 
-
-### **CatBoost Model**
-
-```bash
-python scripts/train_catboost.py
-```
-
-
-
-#### Results:
+#### Results
 
 * The report of each training and evaluation is stored in the folder **`/models/CNN|CatBoost|XGBoost/*/reports.txt`**
