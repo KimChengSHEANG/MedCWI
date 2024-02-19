@@ -14,6 +14,7 @@ from functools import lru_cache, wraps
 import hashlib
 import time
 import sys
+from bs4 import UnicodeDammit
 
 def generate_vocab_fr(output_filepath):
 
@@ -87,6 +88,13 @@ def print_execution_time(func):
     return wrapper
 
 
+
+def predict_encoding(file_path) -> str:
+    with open(file_path, 'rb') as file:
+        content = file.read()
+        suggestion = UnicodeDammit(content)
+        return suggestion.original_encoding
+
 def generate_hash(data):
     h = hashlib.new('md5')
     h.update(str(data).encode())
@@ -101,13 +109,17 @@ def write_lines(lines, filepath):
             fout.write(line + '\n')
 
 
-def read_lines(filepath):
-    return [line.rstrip() for line in yield_lines(filepath)]
+def read_lines(filepath, encoding=None):
+    return [line.rstrip() for line in yield_lines(filepath, encoding)]
 
 
-def yield_lines(filepath):
+def yield_lines(filepath, encoding=None):
     filepath = Path(filepath)
-    with filepath.open('r') as f:
+    #print('encoding: ', predict_encoding(filepath))
+    #print(filepath)
+    if encoding is None:
+        encoding = predict_encoding(filepath)
+    with filepath.open('r', encoding=encoding) as f:
         for line in f:
             yield line.rstrip()
 

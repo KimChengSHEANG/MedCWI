@@ -1,5 +1,7 @@
 from pathlib import Path
 import sys
+
+from numpy import size
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 import re
@@ -285,14 +287,14 @@ class WordRankFeature(AbstractFeature):
         if model_filepath.exists():
             return load_dump(model_filepath)
         else:
-            print("Preprocessing word2rank...")
+            print("\nPreprocessing word2rank...")
             download_fasttext()
-
-            lines_generator = yield_lines(EMBEDDINGS_FILEPATH)
+            lines_generator = yield_lines(EMBEDDINGS_FILEPATH, 'utf-8')
             word2rank = {}
             # next(lines_generator)
-            for i, line in enumerate(lines_generator):
-                if i >= vocab_size: break
+            for i, line in enumerate(tqdm(lines_generator, total=vocab_size, desc="Reading fasttext: ")):
+                if i >= vocab_size: 
+                    break
                 word = line.split(' ')[0]
                 word2rank[word] = i
             dump(word2rank, model_filepath)
@@ -300,9 +302,9 @@ class WordRankFeature(AbstractFeature):
     
     @lru_cache(maxsize=10000)
     def get_normalized_rank(self, word):
-        self.max = len(self.get_word2rank())
-        rank = self.get_word2rank().get(word, self.max)
-        return np.log(1 + rank) / np.log(1 + self.max)
+        vocab_size = len(self.get_word2rank())
+        rank = self.get_word2rank().get(word, vocab_size)
+        return np.log(1 + rank) / np.log(1 + vocab_size)
 
     def extractor_context(self, words):
         size = len(words)

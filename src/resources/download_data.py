@@ -26,15 +26,14 @@ def download_fasttext():
     filename = 'cc.fr.300.vec'
     output_dir = RESOURCES_DIR / 'others'
     download_filepath = output_dir / Path(filename + '.gz')
-    if not download_filepath.exists():
-        download_url('https://dl.fbaipublicfiles.com/fasttext/vectors-crawl/cc.fr.300.vec.gz', download_filepath)
-    
-    print('Extracting...')
     output_filepath = output_dir / filename
-    # if not output_filepath.exists():
-    with gzip.open(download_filepath, 'rb') as f_in:
-        with open(output_filepath, 'wb') as f_out:
-            shutil.copyfileobj(f_in, f_out)
-    os.remove(download_filepath)
-    
-    print('Downloading FastText is completed!')
+    if not output_filepath.exists():
+        download_url('https://dl.fbaipublicfiles.com/fasttext/vectors-crawl/cc.fr.300.vec.gz', download_filepath)
+        print('Extracting...')
+        # if not output_filepath.exists():
+        with gzip.open(download_filepath, 'rb') as f_in:
+            with open(output_filepath, 'wb') as f_out:
+                shutil.copyfileobj(f_in, f_out)
+        os.remove(download_filepath)
+        print('Downloading FastText is completed!')
+        
