@@ -572,6 +572,61 @@ class Preprocessor:
                 matrix[i].append((f'{name}_{i}', vec[i]))
         return matrix
 
+
+    def preprocess_custom_data(self, testset_filepath):
+        print("Prepossessing with features: ")
+        print("\t" + "\n\t".join(self.features_args))
+
+        self.features = self.get_features(self.features_args)
+        pd_data = pd.read_csv(testset_filepath)
+        data = {}
+        labels = []
+        for i in tqdm(range(len(pd_data)), desc='Preprocessing'):
+            x, y = self.process(pd_data.iloc[i])
+            for key, val in x:
+                if key in data:
+                    data[key].append(val)
+                else:
+                    data[key] = [val]
+            labels.append(y)
+
+        data['label'] = labels
+        
+        data = pd.DataFrame(data) 
+        data.to_excel(self.PROCESSED_DATA_PATH / 'test.xlsx', index=False)
+        size = len(data)
+
+        d = data.iloc[:, 3:-1]
+        y = data.loc[:, 'label'].tolist()
+        sents = data.iloc[:, :3].to_numpy()
+
+        x = []
+        for i in range(size):
+            x_ = []
+            n = len(d.iloc[i]) // (MAX_TARGET_WORDS + 2)
+            
+            for j in range(MAX_TARGET_WORDS + 2):
+                values = d.iloc[i][j*n : j*n + n].tolist()
+                row = np.array([])
+                for val in values:
+                    row = np.append(row, val)
+                x_.append(row)
+
+            x.append(np.array(x_))
+            
+        x = np.array(x)
+        y = np.array([[0,1] if label==1 else [1,0] for label in y])
+
+        return x, y, sents
+    
+    def preprocess_custom_data2(self, testset_filepath):
+        x, y, sents = self.preprocess_custom_data(testset_filepath)
+        x_shape = x.shape
+        x = x.reshape(x_shape[0], x_shape[1] * x_shape[2])
+        y = np.argmax(y, axis=1)
+        return x, y, sents
+ 
+    
     def process(self, row):
         sentence = row['sentence']
         target_phrase = row['target']
@@ -595,9 +650,9 @@ class Preprocessor:
 
         x = [('LC', left_words), ('T', target_words), ('RC', right_words)] + [item for item in left_context_vector] + [item for item in right_context_vector] + [item for items in target_word_vectors for item in items]
 
-        y = 0 if row['label'] == 'par-défaut' else 1
+        y = 0 if row['label'] == 'par-défaut' or row['label'] == 'simple' else 1
         return (np.array(x, dtype=object), y)
-
+            
     def preprocess_data(self):
         if not self.PROCESSED_DATA_FILEPATH.exists():
             print("Prepossessing with features: ")
@@ -615,7 +670,6 @@ class Preprocessor:
             # results = multiprocess(self.process, pd_data.iloc, len(pd_data), 'Preprocessing')
             for i in tqdm(range(len(pd_data)), desc='Preprocessing'):
                 x, y = self.process(pd_data.iloc[i])
-                # for x, y in results:
                 for key, val in x:
                     if key in data:
                         data[key].append(val)

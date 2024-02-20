@@ -1,4 +1,4 @@
-from src.helper import count_training, evaluation_report, write_lines
+from src.helper import count_training, save_evaluation_report, write_lines
 from src.paths import REPO_DIR
 from src.preprocessor import Preprocessor
 import xgboost as xgb
@@ -53,7 +53,10 @@ def train_and_evaluate(features, max_depth=10, n_estimators=300, learning_rate=0
     predictions = gbm_model.predict(x_test)
 
     # print(classification_report(y_test, predictions, digits=4))
-    return evaluation_report(predictions, y_test, x_test_sents, out_dir, features)
+    # return save_evaluation_report(predictions, y_test, x_test_sents, out_dir, features)
+    
+    model_name = out_dir.parent.stem + '_' + out_dir.stem
+    return save_evaluation_report(predictions, y_test, x_test_sents, out_dir, model_name, features)
 
     
 def xgboost_train_and_evaluate_n_times(features, max_depth=10, n_estimators=300, learning_rate=0.05, use_gpu=False, n=1):

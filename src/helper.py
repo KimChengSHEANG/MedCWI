@@ -152,19 +152,21 @@ def log_stdout(filepath, mute_stdout=False):
         log_file.close()
 
 
-def evaluation_report(predictions, y_test, x_test_sents, output_dir, features):
+def save_evaluation_report(predictions, y_test, x_test_sents, output_dir, model_name, features):
 
     sents = []
     targets = []
     for sent in x_test_sents:
         sents.append(' '.join(sent[0] + sent[1] + sent[2]))
         targets.append(' '.join(sent[1]))
+    
     data = pd.DataFrame()
     data['sentence'] = sents 
     data['target'] = targets
     data['label'] = y_test 
     data['predicted'] = predictions
-    data.to_excel(output_dir / 'results.xlsx')
+    
+    data.to_excel(output_dir / f'{model_name}_results.xlsx')
 
 
     print("all_prediction.shape:", predictions.shape)
@@ -187,7 +189,7 @@ def evaluation_report(predictions, y_test, x_test_sents, output_dir, features):
     output_dir.mkdir(parents=True, exist_ok=True)
 
     # dirname = str(checkpoint_dir).split('/')[-1]
-    fout = open(output_dir / f"report.txt", "w")
+    fout = open(output_dir / f'{model_name}_report.txt', "w")
     fout.write(classification_report(y_test, predictions, digits=4) + "\n")
 
     fout.write("Accuracy: {:.3f}\n".format(accuracy_score(y_test, predictions)))
@@ -207,11 +209,10 @@ def evaluation_report(predictions, y_test, x_test_sents, output_dir, features):
     # fout.write("=" * 50 + "\n")
     fout.close()
 
-    features_filepath = Path(output_dir) / 'features.txt'
+    features_filepath = Path(output_dir) / f'{model_name}_features.txt'
     if not features_filepath.exists():
         write_lines(features, features_filepath)
-
-    print("Save report to a file. Completed!")
+    print(f'Report saved to {output_dir}')
     return f1_score(y_test, predictions, average='macro')
 
 

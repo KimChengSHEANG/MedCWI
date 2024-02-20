@@ -53,12 +53,12 @@ def evaluate_with_a_checkpoint(x_test, y_test, x_test_sents, checkpoint_dir, fea
                 # print(batch_predictions)
                 all_predictions = np.concatenate([all_predictions, batch_predictions])
                 # print(all_predictions)
+                
+            return all_predictions
+    
 
-    # Print accuracy if y_test is defined
-    helper.evaluation_report(all_predictions, y_test, x_test_sents, checkpoint_dir, features)
 
-
-def evaluate(x_test, y_test, x_test_sents, model_dir=None, features=None, lang=Language.FRENCH):
+def evaluate(x_test, y_test, x_test_sents, model_dir=None, features=None, output_dir=None, lang=Language.FRENCH):
     
     p = Path(REPO_DIR / f'models/CNN')
     dirs = sorted(p.iterdir(), key=lambda f: f.stat().st_mtime)
@@ -66,13 +66,21 @@ def evaluate(x_test, y_test, x_test_sents, model_dir=None, features=None, lang=L
     if len(dirs) > 0:
         if model_dir:
             checkpoint_dir = REPO_DIR / f'models/CNN/{model_dir}'
-            print(f"Checkpoint dir: {checkpoint_dir}")
-            evaluate_with_a_checkpoint(x_test, y_test, x_test_sents, checkpoint_dir, features, lang)
         else:
-            checkpoint_dir = str(dirs[-1])
-            print(f"Checkpoint dir: {checkpoint_dir}")
-            evaluate_with_a_checkpoint(x_test, y_test, x_test_sents, Path(checkpoint_dir), features, lang)
-        return 
+            checkpoint_dir = Path(str(dirs[-1])) # load the last checkpoint
+            
+        print(f"Checkpoint dir: {checkpoint_dir}")    
+        all_predictions = evaluate_with_a_checkpoint(x_test, y_test, x_test_sents, checkpoint_dir, features, lang)
+        
+        if output_dir is None: 
+            output_dir = checkpoint_dir        
+            
+        Path(output_dir).mkdir(parents=True, exist_ok=True) # create output directory if it doesn't exist
+        model_name = checkpoint_dir.parent.stem + '_' + checkpoint_dir.stem
+        
+        y_test = np.argmax(y_test, axis=1)
+        helper.save_evaluation_report(all_predictions, y_test, x_test_sents, output_dir, model_name, features)
+        
     else:
         print("You haven't trained a model yet.")
         print("Run training script to train a model, e.g.,: python scripts/train_all.py")

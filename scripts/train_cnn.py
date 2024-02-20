@@ -4,9 +4,7 @@ import sys
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 # -- end fix path --
 
-from src.preprocessor import Preprocessor
-from src.train import train, train_and_evaluate_n_times
-from src.evaluate import evaluate
+from src.train import train_and_evaluate_n_times
 
 if __name__ == '__main__':
     # print('Training a model...')

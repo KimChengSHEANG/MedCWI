@@ -1,0 +1,10 @@
+sentence,target,label
+"Après trois mois de ce régime , on note une nette amélioration des lésions : la voix du patient est plus forte .",la voix,simple
+"Du GHB est retrouvé dans l'urine au taux de 4 ug / ml .'Ce taux peut-être physiologique ( 5-7 ) , Par ailleurs , les metabolites du propoxyphene sont retrouvés dans les urines , ainsi que de la caféine et de la cotinine .",les metabolites,complex
+"A l'interrogatoire, il existait des troubles de la marche, des douleurs neuropathiques en ceinture et des troubles mictionnels à type d'incontinence urinaire d'effort.",à type d'incontinence urinaire,simple
+"Il souffre par ailleurs d'allergies saisonnières , d'hypercholestérolémie secondaire à la prise d'isotrétinoïne et de myopie nécessitant le port de verres correcteurs .",et de myopie,complex
+"Les échanges plasmatiques pour ce patient ont duré au total trois mois , avec une diminution progressive des fréquences d'administration le dernier mois .",au total trois mois,simple
+"Les douleurs sont intermittentes , modérées et aggravées à l'effort , empêchant toute pratique sportive .","intermittentes , modérées et aggravées",simple
+"N'étant plus dans les conditions d'exposition professionnelle , le salarié se trouve alors soumis aux normes d'exposition de la population générale , qu'il dépasse largement ( inférieure à 0,55 µg / g de créatinine  7  .",d'exposition de la population générale,simple
+"Cette hospitalisation apparaît en fait comme l'aboutissement d'une dégradation lente et inéluctable de l'état de santé de ce jeune homme ; en effet, les premières manifestations avaient débuté dans le courant du 2ème semestre 2004 sous la forme de troubles psychiques a minima se traduisant par des agressions physiques portant le plus souvent sur de jeunes femmes, et accompagnés d'un isolement avec tendance à la négligence et à la clochardisation progressive.",Cette hospitalisation,simple
+"Le patient ne se plaignait d'aucune douleur urétrale , il n'avait pas de dysurie ou d'autre symptomatologie fonctionnelle urinaire .",de dysurie,complex

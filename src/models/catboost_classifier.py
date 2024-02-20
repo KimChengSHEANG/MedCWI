@@ -1,5 +1,5 @@
 from catboost import CatBoostClassifier
-from src.helper import count_training, evaluation_report, write_lines
+from src.helper import count_training, save_evaluation_report, write_lines
 from src.paths import REPO_DIR
 from src.preprocessor import Preprocessor
 import pickle
@@ -45,7 +45,8 @@ def train_and_evaluate(features, iterations=1200, learning_rate=0.03, use_gpu=Tr
     # evaluate the model with test data
     predictions = model.predict(x_test)
 
-    return evaluation_report(predictions, y_test, x_test_sents, out_dir, features)
+    model_name = out_dir.parent.stem + '_' + out_dir.stem
+    return save_evaluation_report(predictions, y_test, x_test_sents, out_dir, model_name, features)
 
 
 def catboost_train_and_evaluate_n_times(features, iterations=1200, learning_rate=0.03, n=1, use_gpu=False):
